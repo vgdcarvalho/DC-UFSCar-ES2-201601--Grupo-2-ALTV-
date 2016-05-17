@@ -1,0 +1,20 @@
+- Year: deve ser um ano válido (de acordo com o calendário da linguagem Java)
+(Alessandra)
+
+- Bibtexkey: definido pelo usuário ou automaticamente, deve ter no mínimo 2
+caracteres, sendo o primeiro uma letra maiúscula ou minúscula
+(Alessandra)
+
+– Oferecer a opção de importar arquivo em formato CSV
+(Vinicius)
+
+– Oferecer a opção de criação de um novo arquivo (database) quando existirem
+entradas duplicadas no arquivo corrente (current database) e o arquivo que está
+sendo importado (considerar formatos BibTeX e CSV).
+(Alexandre)
+
+- Teste de regressão e teste das novas funcionalidades
+(Lucas E Tiago) :
+	-- Rexecutar os testes ja implementados
+	-- Rexecutar os Inserção de item bibliográfico, Importação de itens bibliográficos na base corrente
+	-- Executar novos testes para as funcionalidades implementadas
