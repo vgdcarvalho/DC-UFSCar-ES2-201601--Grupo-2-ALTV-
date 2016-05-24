@@ -19,3 +19,6 @@ sendo importado (considerar formatos BibTeX e CSV).
 	-- Rexecutar os testes ja implementados
 	-- Rexecutar os Inserção de item bibliográfico, Importação de itens bibliográficos na base corrente
 	-- Executar novos testes para as funcionalidades implementadas
+
+
+-------------------------------------------------------------------------------------------------
