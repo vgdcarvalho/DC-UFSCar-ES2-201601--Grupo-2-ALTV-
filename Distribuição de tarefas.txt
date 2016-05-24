@@ -1,6 +1,7 @@
-- Year: deve ser um ano válido (de acordo com o calendário da linguagem Java)
+﻿- Year: deve ser um ano válido (de acordo com o calendário da linguagem Java)
 (Alessandra)
 
+*observação*
 - Bibtexkey: definido pelo usuário ou automaticamente, deve ter no mínimo 2
 caracteres, sendo o primeiro uma letra maiúscula ou minúscula
 (Alessandra)
