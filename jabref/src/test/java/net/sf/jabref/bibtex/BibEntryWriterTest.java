@@ -398,10 +398,370 @@ public class BibEntryWriterTest {
 
         String actual = stringWriter.toString();
 
-        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
-                "  note = {some note}," + Globals.NEWLINE +
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE + "  note = {some note}," + Globals.NEWLINE
+                + "}" + Globals.NEWLINE;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testBookSerialization() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        //set a required field
+        entry.setField("title", "Nice Book");
+        entry.setField("author", "Foo Bar");
+        //set an optional field
+        entry.setField("number", "1");
+        entry.setField("note", "some note");
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+
+        // @formatter:off
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  title  = {Nice Book}," + Globals.NEWLINE +
+                "  author = {Foo Bar}," + Globals.NEWLINE +
+                "  number = {1}," + Globals.NEWLINE +
+                "  note   = {some note}," + Globals.NEWLINE +
                 "}" + Globals.NEWLINE;
+        // @formatter:on
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void bookRoundTripTest() throws IOException {
+        // @formatter:off
+        String bibtexEntry = "@Book{test," + Globals.NEWLINE +
+                "  Title                   = {Nice Book}," + Globals.NEWLINE +
+                "  Author                  = {Foo Bar}," + Globals.NEWLINE +
+                "  Note                     = {some note}," + Globals.NEWLINE +
+                "  Number                   = {1}" + Globals.NEWLINE +
+                "}";
+        // @formatter:on
+
+        // read in bibtex string
+        ParserResult result = BibtexParser.parse(new StringReader(bibtexEntry));
+
+        Collection<BibEntry> entries = result.getDatabase().getEntries();
+        assertEquals(1, entries.size());
+
+        BibEntry entry = entries.iterator().next();
+        assertEquals("test", entry.getCiteKey());
+        assertEquals(5, entry.getFieldNames().size());
+        Set<String> fields = entry.getFieldNames();
+        assertTrue(fields.contains("author"));
+        assertEquals("Foo Bar", entry.getField("author"));
+
+        //write out bibtex string
+        StringWriter stringWriter = new StringWriter();
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+        String actual = stringWriter.toString();
+
+        assertEquals(bibtexEntry, actual);
+    }
+
+    @Test
+    public void bookRoundTripWithPrependingNewlines() throws IOException {
+        // @formatter:off
+        String bibtexEntry = "\r\n@Book{test," + Globals.NEWLINE +
+                "  Title                   = {Nice Book}," + Globals.NEWLINE +
+                "  Author                  = {Foo Bar}," + Globals.NEWLINE +
+                "  Note                     = {some note}," + Globals.NEWLINE +
+                "  Number                   = {1}" + Globals.NEWLINE +
+                "}";
+        // @formatter:on
+
+        // read in bibtex string
+        ParserResult result = BibtexParser.parse(new StringReader(bibtexEntry));
+
+        Collection<BibEntry> entries = result.getDatabase().getEntries();
+        assertEquals(1, entries.size());
+
+        BibEntry entry = entries.iterator().next();
+        assertEquals("test", entry.getCiteKey());
+        assertEquals(5, entry.getFieldNames().size());
+        Set<String> fields = entry.getFieldNames();
+        assertTrue(fields.contains("author"));
+        assertEquals("Foo Bar", entry.getField("author"));
+
+        //write out bibtex string
+        StringWriter stringWriter = new StringWriter();
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+        String actual = stringWriter.toString();
+
+        assertEquals(bibtexEntry, actual);
+    }
+
+    @Test
+    public void bookRoundTripWithModification() throws IOException {
+        // @formatter:off
+        String bibtexEntry = Globals.NEWLINE + "@Book{test," + Globals.NEWLINE +
+                "  Title                   = {Nice Book}," + Globals.NEWLINE +
+                "  Author                  = {Foo Bar}," + Globals.NEWLINE +
+                "  Note                    = {some note}," + Globals.NEWLINE +
+                "  Number                  = {1}" + Globals.NEWLINE +
+                "}";
+        // @formatter:on
+
+        // read in bibtex string
+        ParserResult result = BibtexParser.parse(new StringReader(bibtexEntry));
+
+        Collection<BibEntry> entries = result.getDatabase().getEntries();
+        assertEquals(1, entries.size());
+
+        BibEntry entry = entries.iterator().next();
+        assertEquals("test", entry.getCiteKey());
+        assertEquals(5, entry.getFieldNames().size());
+
+        // Modify entry
+        entry.setField("author", "BlaBla");
+
+        Set<String> fields = entry.getFieldNames();
+        assertTrue(fields.contains("author"));
+        assertEquals("BlaBla", entry.getField("author"));
+
+        // write out bibtex string
+        StringWriter stringWriter = new StringWriter();
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+        String actual = stringWriter.toString();
+
+        // @formatter:off
+        String expected = Globals.NEWLINE + "@Book{test," + Globals.NEWLINE +
+                "  title  = {Nice Book}," + Globals.NEWLINE +
+                "  author = {BlaBla}," + Globals.NEWLINE +
+                "  number = {1}," + Globals.NEWLINE +
+                "  note   = {some note}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        // @formatter:on
+        assertEquals(expected, actual);
+    }
+
+    //    @Test
+    //    public void bookRoundTripWithCamelCasingInTheOriginalEntryAndResultInLowerCase() throws IOException {
+//        // @formatter:off
+//        String bibtexEntry = Globals.NEWLINE + "@Book{test," + Globals.NEWLINE +
+//                "  Title                   = {Nice Book}," + Globals.NEWLINE +
+//                "  Author                  = {Foo Bar}," + Globals.NEWLINE +
+//                "  Note                     = {some note}," + Globals.NEWLINE +
+//                "  Number                   = {1}" + Globals.NEWLINE +
+//                "  HowPublished             = {asdf}," + Globals.NEWLINE +
+//                "}";
+//        // @formatter:on
+    //
+    //        // read in bibtex string
+    //        ParserResult result = BibtexParser.parse(new StringReader(bibtexEntry));
+    //
+    //        Collection<BibEntry> entries = result.getDatabase().getEntries();
+    //        assertEquals(1, entries.size());
+    //
+    //        BibEntry entry = entries.iterator().next();
+    //        assertEquals("test", entry.getCiteKey());
+    //        assertEquals(6, entry.getFieldNames().size());
+    //
+    //        // modify entry
+    //        entry.setField("author", "BlaBla");
+    //
+    //        Set<String> fields = entry.getFieldNames();
+    //        assertTrue(fields.contains("author"));
+    //        assertEquals("BlaBla", entry.getField("author"));
+    //
+    //        //write out bibtex string
+    //        StringWriter stringWriter = new StringWriter();
+    //
+    //        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+    //        String actual = stringWriter.toString();
+    //
+//        // @formatter:off
+//        String expected = Globals.NEWLINE + "@Book{test," + Globals.NEWLINE +
+//                "  title       = {Nice Book}," + Globals.NEWLINE +
+//                "  author      = {BlaBla}," + Globals.NEWLINE +
+//                "  number       = {1}," + Globals.NEWLINE +
+//                "  note         = {some note}," + Globals.NEWLINE +
+//                "  howpublished = {asdf}," + Globals.NEWLINE +
+//                "}" + Globals.NEWLINE;
+//        // @formatter:on
+    //        assertEquals(expected, actual);
+    //    }
+
+    @Test
+    public void bookRoundTripWithAppendedNewlines() throws IOException {
+        // @formatter:off
+        String bibtexEntry = "@Book{test," + Globals.NEWLINE +
+                "  Title                   = {Nice Book}," + Globals.NEWLINE +
+                "  Author                  = {Foo Bar}," + Globals.NEWLINE +
+                "  Note                     = {some note}," + Globals.NEWLINE +
+                "  Number                   = {1}" + Globals.NEWLINE +
+                "}\n\n";
+        // @formatter:on
+
+        // read in bibtex string
+        ParserResult result = BibtexParser.parse(new StringReader(bibtexEntry));
+
+        Collection<BibEntry> entries = result.getDatabase().getEntries();
+        assertEquals(1, entries.size());
+
+        BibEntry entry = entries.iterator().next();
+        assertEquals("test", entry.getCiteKey());
+        assertEquals(5, entry.getFieldNames().size());
+        Set<String> fields = entry.getFieldNames();
+        assertTrue(fields.contains("author"));
+        assertEquals("Foo Bar", entry.getField("author"));
+
+        //write out bibtex string
+        StringWriter stringWriter = new StringWriter();
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+        String actual = stringWriter.toString();
+
+        // Only one appending newline is written by the writer, the rest by FileActions. So, these should be removed here.
+        assertEquals(bibtexEntry.substring(0, bibtexEntry.length() - 1), actual);
+    }
+
+    @Test
+    public void bookMultipleWritesWithoutModification() throws IOException {
+        // @formatter:off
+        String bibtexEntry = "@Book{test," + Globals.NEWLINE +
+                "  Title                   = {Nice Book}," + Globals.NEWLINE +
+                "  Author                  = {Foo Bar}," + Globals.NEWLINE +
+                "  Note                     = {some note}," + Globals.NEWLINE +
+                "  Number                   = {1}" + Globals.NEWLINE +
+                "}";
+        // @formatter:on
+
+        String result = testSingleWrite(bibtexEntry);
+        result = testSingleWrite(result);
+        result = testSingleWrite(result);
+
+        assertEquals(bibtexEntry, result);
+    }
+
+    private String testBookSingleWrite(String bibtexEntry) throws IOException {
+        // read in bibtex string
+        ParserResult result = BibtexParser.parse(new StringReader(bibtexEntry));
+
+        Collection<BibEntry> entries = result.getDatabase().getEntries();
+        assertEquals(1, entries.size());
+
+        BibEntry entry = entries.iterator().next();
+        assertEquals("test", entry.getCiteKey());
+        assertEquals(5, entry.getFieldNames().size());
+        Set<String> fields = entry.getFieldNames();
+        assertTrue(fields.contains("author"));
+        assertEquals("Foo Bar", entry.getField("author"));
+
+        //write out bibtex string
+        StringWriter stringWriter = new StringWriter();
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+        String actual = stringWriter.toString();
+
+        assertEquals(bibtexEntry, actual);
+        return actual;
+    }
+
+    @Test
+    public void bookMonthFieldSpecialSyntax() throws IOException {
+        // @formatter:off
+        String bibtexEntry = "@Book{test," + Globals.NEWLINE +
+                "  Title                   = {Nice Book}," + Globals.NEWLINE +
+                "  Month                    = mar," + Globals.NEWLINE +
+                "  Number                   = {1}" + Globals.NEWLINE +
+                "}";
+        // @formatter:on
+
+        // read in bibtex string
+        ParserResult result = BibtexParser.parse(new StringReader(bibtexEntry));
+
+        Collection<BibEntry> entries = result.getDatabase().getEntries();
+        assertEquals(1, entries.size());
+
+        BibEntry entry = entries.iterator().next();
+        assertEquals("test", entry.getCiteKey());
+        assertEquals(4, entry.getFieldNames().size());
+        Set<String> fields = entry.getFieldNames();
+        assertTrue(fields.contains("month"));
+        assertEquals("#mar#", entry.getField("month"));
+
+        //write out bibtex string
+        StringWriter stringWriter = new StringWriter();
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+        String actual = stringWriter.toString();
+
+        assertEquals(bibtexEntry, actual);
+    }
+
+    @Test
+    public void addBookFieldWithLongerLength() throws IOException {
+        // @formatter:off
+        String bibtexEntry = Globals.NEWLINE + Globals.NEWLINE + "@Book{test," + Globals.NEWLINE +
+                "  Title        = {Nice Book}," + Globals.NEWLINE +
+                "  Author       = {Foo Bar}," + Globals.NEWLINE +
+                "  Note         = {some note}," + Globals.NEWLINE +
+                "  Number       = {1}" + Globals.NEWLINE +
+                "}";
+        // @formatter:on
+
+        // read in bibtex string
+        ParserResult result = BibtexParser.parse(new StringReader(bibtexEntry));
+        Collection<BibEntry> entries = result.getDatabase().getEntries();
+        BibEntry entry = entries.iterator().next();
+
+        // modify entry
+        entry.setField("howpublished", "asdf");
+
+        //write out bibtex string
+        StringWriter stringWriter = new StringWriter();
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+        String actual = stringWriter.toString();
+
+        // @formatter:off
+        String expected = Globals.NEWLINE + "@Book{test," + Globals.NEWLINE +
+                "  title        = {Nice Book}," + Globals.NEWLINE +
+                "  author       = {Foo Bar}," + Globals.NEWLINE +
+                "  number       = {1}," + Globals.NEWLINE +
+                "  note         = {some note}," + Globals.NEWLINE +
+                "  howpublished = {asdf}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        // @formatter:on
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void doNotWriteEmptyBookFields() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("title", "  ");
+        entry.setField("note", "some note");
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE + "  note  = {some note}," + Globals.NEWLINE
+                + "}" + Globals.NEWLINE;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void trimBookFieldContents() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("note", "        some note    \t");
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE + "  note = {some note}," + Globals.NEWLINE
+                + "}" + Globals.NEWLINE;
 
         assertEquals(expected, actual);
     }
 }
+
