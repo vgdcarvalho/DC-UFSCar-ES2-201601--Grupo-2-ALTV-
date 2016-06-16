@@ -42,6 +42,8 @@ import com.google.common.base.Strings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.swing.*;
+
 public class BibEntry {
     private static final Log LOGGER = LogFactory.getLog(BibEntry.class);
 
@@ -190,14 +192,14 @@ public class BibEntry {
      * <p>
      * The following aliases are considered (old bibtex <-> new biblatex) based
      * on the BibLatex documentation, chapter 2.2.5:
-     * address 		<-> location
-     * annote			<-> annotation
-     * archiveprefix 	<-> eprinttype
-     * journal 		<-> journaltitle
-     * key				<-> sortkey
-     * pdf 			<-> file
-     * primaryclass 	<-> eprintclass
-     * school 			<-> institution
+     * address      <-> location
+     * annote           <-> annotation
+     * archiveprefix    <-> eprinttype
+     * journal      <-> journaltitle
+     * key              <-> sortkey
+     * pdf          <-> file
+     * primaryclass     <-> eprintclass
+     * school           <-> institution
      * These work bidirectional.
      * <p>
      * Special attention is paid to dates: (see the BibLatex documentation,
@@ -317,6 +319,75 @@ public class BibEntry {
     }
 
     /**
+     * Trecho de codigo A1: responsavel por validar o campo ano.
+     */
+
+    public static boolean isNumeric(String str) {
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public static String verificaAno(String ano) {
+        Calendar cal = Calendar.getInstance();
+        int anoInicial = 1970;
+        int anoAtual = cal.get(Calendar.YEAR);
+
+        int valor = Integer.parseInt(ano);
+        String str = null;
+        boolean flag = true;
+        //checa se o ano eh valido
+        while (flag && ((valor < anoInicial) || (valor > anoAtual)))
+        {
+            str = JOptionPane.showInputDialog(null, "Ocorreu ao tentar inserir Year.\nDigite novamente:\n", "Atenção",
+                    JOptionPane.WARNING_MESSAGE);
+            System.out.println(str);
+
+            if ((str == null) || str.equals("") || !(isNumeric(str))) {
+                flag = false;
+                valor = -1;
+            } else {
+                valor = Integer.parseInt(str);
+            }
+
+        }
+        if (!flag) {
+            valor = 2016;
+        }
+
+        ano = Integer.toString(valor);
+
+        return ano;
+    }
+
+    /**
+     * Fim de A1.
+     */
+
+
+    /**
+     * Trecho de codigo A2: responsavel por validar o campo bibexkey.
+     */
+
+    public String verificaBibtexkey(String bibtexkey, boolean flag) {
+        if( Character.isLetter( bibtexkey.charAt(0)) && (bibtexkey.length() > 1) ){
+            return bibtexkey;
+        }
+        JOptionPane.showMessageDialog(null,
+                "Ocorreu ao tentar inserir Bibtexkey. \nUma chave foi gerada automaticamente. \n");
+        if (flag) {
+            return "Art".concat(this.getId());
+        }
+        return "Book".concat(this.getId());
+    }
+
+    /**
+     * Fim de A2.
+     */
+
+    /**
      * Set a field, and notify listeners about the change.
      *
      * @param name  The field to set.
@@ -335,6 +406,29 @@ public class BibEntry {
 
         if (BibEntry.ID_FIELD.equals(fieldName)) {
             throw new IllegalArgumentException("The field name '" + name + "' is reserved");
+        }
+
+        //        System.out.println(name + ' ' + value);
+
+        //Verifica se o ano e o bibtexkey eh valido para entradas do tipo "Article" ou "Book"
+        if (type.equals("article") || type.equals("book")) {
+
+            if (name.equals("year")) {
+                value = verificaAno(value);
+            }
+
+            if (type.equals("article")) {
+               if (name.equals("bibtexkey")) {
+                    value = verificaBibtexkey(value, true);
+                }
+            }
+
+            if (type.equals("book")) {
+               if (name.equals("bibtexkey")) {
+                    value = verificaBibtexkey(value, false);
+                    }
+            }
+            System.out.println(name + ' ' + value);
         }
 
         changed = true;
