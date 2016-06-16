@@ -50,7 +50,10 @@ public class CsvContentImporter extends ImportFormat {
                 if (!str.trim().isEmpty()) {
                     String[] fields = str.split(";");
                     BibEntry entry = new BibEntry();
-                    entry.setType(BibtexEntryTypes.MISC);
+                    entry.setType(BibtexEntryTypes.TECHREPORT);
+                    entry.setField("year", fields[0]);
+                    entry.setField("author", fields[1]);
+                    entry.setField("title", fields[2]);
                     elements.add(entry);
                     str = bf.readLine();
                 }
