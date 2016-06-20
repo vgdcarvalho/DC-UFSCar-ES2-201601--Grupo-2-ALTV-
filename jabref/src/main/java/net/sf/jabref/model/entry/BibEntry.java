@@ -344,8 +344,7 @@ public class BibEntry {
         String str = null;
         boolean flag = true;
         //checa se o ano eh valido
-        while (flag && ((valor < anoInicial) || (valor > anoAtual)))
-        {
+        while (flag && ((valor < anoInicial) || (valor > anoAtual))) {
             str = JOptionPane.showInputDialog(null, "Ocorreu ao tentar inserir Year.\nDigite novamente:\n", "Atenção",
                     JOptionPane.WARNING_MESSAGE);
             System.out.println(str);
@@ -377,7 +376,7 @@ public class BibEntry {
      */
 
     public String verificaBibtexkey(String bibtexkey, boolean flag) {
-        if( Character.isLetter( bibtexkey.charAt(0)) && (bibtexkey.length() > 1) ){
+        if (Character.isLetter(bibtexkey.charAt(0)) && (bibtexkey.length() > 1)) {
             return bibtexkey;
         }
         JOptionPane.showMessageDialog(null,
@@ -397,10 +396,9 @@ public class BibEntry {
      */
     public String verificaLetraMinus(String campo, String nomeCampo) {
         if (Character.isLetter(campo.charAt(0)) && Character.isLowerCase(campo.charAt(0))) {
-            int flag = JOptionPane.showConfirmDialog(null,
-                    "É interessante que o campo " + nomeCampo
-                            + " comece com letra maiúscula.\nPodemos fazer isso para você ?\n",
-                    "Primeiro Caractere Minúsculo", 0);
+            int flag = JOptionPane.showConfirmDialog(null, "É interessante que o campo " + nomeCampo
+                    + " comece com letra maiúscula.\nPodemos fazer isso para você ?\n", "Primeiro Caractere Minúsculo",
+                    0);
             if (flag == JOptionPane.YES_OPTION) {
                 campo = campo.replaceFirst(Character.toString(campo.charAt(0)),
                         Character.toString(Character.toUpperCase(campo.charAt(0))));
@@ -408,6 +406,7 @@ public class BibEntry {
         }
         return campo;
     }
+
     /**
      * Fim de C1.
      */
@@ -442,18 +441,19 @@ public class BibEntry {
             }
 
             if (type.equals("article")) {
-               if (name.equals("bibtexkey")) {
+                if (name.equals("bibtexkey")) {
                     value = verificaBibtexkey(value, true);
                 }
             }
 
             if (type.equals("book")) {
-               if (name.equals("bibtexkey")) {
+                if (name.equals("bibtexkey")) {
                     value = verificaBibtexkey(value, false);
-                    }
+                }
             }
         }
 
+        //INICIO
         // para todos os campos abaixo, caso tenha uma letra no 1a pos, ela sera colocada como maiusculo
         if (type.equals("article") || type.equals("book")) {
 
@@ -474,6 +474,8 @@ public class BibEntry {
             }
             System.out.println(name + ' ' + value);
         }
+
+        //FIM
 
         changed = true;
 

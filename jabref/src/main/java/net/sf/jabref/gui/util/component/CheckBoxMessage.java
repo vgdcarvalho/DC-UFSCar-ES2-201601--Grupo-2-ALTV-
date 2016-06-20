@@ -46,6 +46,22 @@ public class CheckBoxMessage extends JPanel {
         add(cb);
     }
 
+    // Novo construtor para checkbox
+    public CheckBoxMessage(String message) {
+        cb = null;
+        GridBagLayout gbl = new GridBagLayout();
+        setLayout(gbl);
+        GridBagConstraints con = new GridBagConstraints();
+        con.gridwidth = GridBagConstraints.REMAINDER;
+
+        JLabel lab = new JLabel(message + '\n');
+
+        gbl.setConstraints(lab, con);
+        add(lab);
+        con.anchor = GridBagConstraints.WEST;
+        con.insets = new Insets(10, 0, 0, 0);
+    }
+
     public boolean isSelected() {
         return cb.isSelected();
     }

@@ -46,6 +46,8 @@ import net.sf.jabref.model.database.KeyCollisionException;
 import net.sf.jabref.model.entry.BibEntry;
 import net.sf.jabref.model.entry.BibtexString;
 
+import net.sf.jabref.gui.util.component.CheckBoxMessage;
+import net.sf.jabref.model.DuplicateCheck;
 /*
  * TODO: could separate the "menu item" functionality from the importing functionality
  *
@@ -166,6 +168,47 @@ public class ImportMenuItem extends JMenuItem implements ActionListener {
             }
         }
 
+        /**
+         * Trecho de codigo C1: responsavel por verificar duplicatas e oferecer
+         * a opcao de criar uma nova base com as novas entradas
+         */
+        public void criarNovaBaseDuplicatas(final List<BibEntry> entradas) {
+
+            final BasePanel panel = (BasePanel) frame.getTabbedPane().getSelectedComponent();
+            boolean flag = false;
+            for (BibEntry entry : entradas) {
+                if ((panel != null)
+                        && (DuplicateCheck.containsDuplicate(panel.getDatabase(), entry, panel.getBibDatabaseContext()
+                                .getMode()).isPresent())) {
+                    entry.setGroupHit(true);
+                    if (entry.isGroupHit()) {
+                        flag = true;
+                    }
+                }
+            }
+            int resp = 1; // no option -> 1
+            if (flag) {
+                CheckBoxMessage box = new CheckBoxMessage(
+                        Localization.lang("Foram detectadas entradas duplicadas. Deseja criar uma nova database ?"));
+                resp = JOptionPane.showConfirmDialog(ImportMenuItem.this, box,
+                        Localization.lang("Resolver Duplicatas"), JOptionPane.YES_NO_OPTION);
+                if (resp == JOptionPane.YES_OPTION) {
+                    frame.addTab(bibtexResult.getDatabaseContext(), Globals.prefs.getDefaultEncoding(), true);
+                    frame.output(Localization.lang("New Database") + ": " + bibtexResult.getDatabase().getEntryCount());
+                }
+            }
+            if ((resp == JOptionPane.NO_OPTION)) {
+                ImportInspectionDialog diag = new ImportInspectionDialog(frame, panel, Localization.lang("Import"),
+                        openInNew);
+                diag.addEntries(bibtexResult.getDatabase().getEntries());
+                diag.entryListComplete();
+                diag.setLocationRelativeTo(frame);
+                diag.setVisible(true);
+                diag.toFront();
+            }
+
+        }
+
         @Override
         public void update() {
             if (!fileOk) {
@@ -193,21 +236,20 @@ public class ImportMenuItem extends JMenuItem implements ActionListener {
                     frame.output(
                             Localization.lang("Imported entries") + ": " + bibtexResult.getDatabase().getEntryCount());
                 } else {
-                    final BasePanel panel = (BasePanel) frame.getTabbedPane().getSelectedComponent();
-
-                    ImportInspectionDialog diag = new ImportInspectionDialog(frame, panel, Localization.lang("Import"),
-                            openInNew);
-                    diag.addEntries(bibtexResult.getDatabase().getEntries());
-                    diag.entryListComplete();
-                    diag.setLocationRelativeTo(frame);
-                    diag.setVisible(true);
-                    diag.toFront();
+                    //chamar funcao que lida com entradas duplicadas
+                    final List<BibEntry> entradas;
+                    entradas = bibtexResult.getDatabase().getEntries();
+                    criarNovaBaseDuplicatas(entradas);
                 }
             }
             frame.unblock();
         }
     }
 
+
+    /**
+     * Fim de C1.
+     */
 
     private ParserResult mergeImportResults(List<ImportFormatReader.UnknownFormatImport> imports) {
         BibDatabase database = new BibDatabase();
