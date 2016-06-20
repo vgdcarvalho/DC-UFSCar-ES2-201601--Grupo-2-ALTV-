@@ -3,16 +3,16 @@
  */
 package net.sf.jabref.importer.fileformat;
 
+import net.sf.jabref.importer.ImportFormatReader;
+import net.sf.jabref.importer.OutputPrinter;
+import net.sf.jabref.model.entry.BibEntry;
+import net.sf.jabref.model.entry.BibtexEntryTypes;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.sf.jabref.importer.ImportFormatReader;
-import net.sf.jabref.importer.OutputPrinter;
-import net.sf.jabref.model.entry.BibEntry;
-import net.sf.jabref.model.entry.BibtexEntryTypes;
 
 /**
  * This importer exists only to enable `--importToOpen someEntry.bib`
@@ -48,12 +48,20 @@ public class CsvContentImporter extends ImportFormat {
             String str;
             while ((str = bf.readLine()) != null) {
                 if (!str.trim().isEmpty()) {
-                    String[] fields = str.split(";");
+                    String[] fields = str.split(",");
                     BibEntry entry = new BibEntry();
-                    entry.setType(BibtexEntryTypes.TECHREPORT);
+                    int i = 1;
+//                    entry.setType("Book");
+                    entry.setType(BibtexEntryTypes.BOOK);
+//                    entry.setType(BibtexEntryTypes.BOOK);
                     entry.setField("year", fields[0]);
                     entry.setField("author", fields[1]);
                     entry.setField("title", fields[2]);
+                    entry.setField("publisher", fields[3]);
+//                    for (String field : Arrays.copyOfRange(fields, 1, fields.length)){
+//                        entry.setField(field, fields[i]);
+//                        i++;
+//                    }
                     elements.add(entry);
                     str = bf.readLine();
                 }
