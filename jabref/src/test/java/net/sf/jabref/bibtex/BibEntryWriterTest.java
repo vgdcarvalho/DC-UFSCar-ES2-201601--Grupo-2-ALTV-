@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 
 public class BibEntryWriterTest {
 
@@ -43,6 +44,7 @@ public class BibEntryWriterTest {
         writer = new BibEntryWriter(new LatexFieldFormatter(), true);
     }
 
+	//"conversao" do objeto para uma string
     @Test
     public void testSerialization() throws IOException {
         StringWriter stringWriter = new StringWriter();
@@ -71,6 +73,723 @@ public class BibEntryWriterTest {
         assertEquals(expected, actual);
     }
 
+	/*Testes para o campo Year do item Article*/
+	@Test
+    public void testVerifyFieldYearForArticleError() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("year", "1969");//set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {1969}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleHit() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "1970"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {1970}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleHit1() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "2000"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {2000}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleHit2() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "2016"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {2016}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleError1() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "2017"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {2017}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleError2() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "19700"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {19700}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleError3() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "20102"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {20102}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleError4() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "20as"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {20as}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleError5() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "200"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {200}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleError6() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "197"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {197}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForArticleError7() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+		entry.setField("year", "asdf"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{," + Globals.NEWLINE +
+                "  year = {asdf}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+	/*Testes para o campo Year do item Book*/
+	@Test
+    public void testVerifyFieldYearForBookError() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("year", "1969"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {1969}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookHit() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "1970"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {1970}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookHit1() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "2000"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {2000}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookHit2() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "2016"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {2016}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookError1() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "2017"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {2017}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookError2() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "19700"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {19700}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookError3() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "20102"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {20102}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookError4() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "20as"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {20as}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookError5() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "200"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {200}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookError6() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "197"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {197}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+    @Test
+    public void testVerifyFieldYearForBookError7() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+		entry.setField("year", "asdf"); //set the field year
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{," + Globals.NEWLINE +
+                "  year = {asdf}," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+	/*Testes para o campo Bibtexkey do item Article*/
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleError() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "0");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{0," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleError1() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "a");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{a," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleError2() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "0a");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{0a," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleError3() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "12");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{12," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleError4() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "123");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{123," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleError5() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "A");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{A," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleHit() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "a10");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{a10," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleHit1() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "abc");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{abc," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleHit2() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "ABC");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{ABC," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleHit3() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "Abc");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{Abc," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleHit4() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "abcdefghijklmnopqrstuvwxyz0123456789");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{abcdefghijklmnopqrstuvwxyz0123456789," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForArticleHit5() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "article");
+        entry.setField("bibtexkey", "A0123456789A");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Article{A0123456789A," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	/*Testes para o campo Bibtexkey do item Book*/
+	@Test
+    public void testVerifyFieldBibtexkeyForBookError() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "0");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{0," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }
+
+	@Test
+    public void testVerifyFieldBibtexkeyForBookError1() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "a");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{a," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForBookError2() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "0a");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{0a," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForBookError3() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "12");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{12," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForBookError4() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "123");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{123," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+
+	@Test
+    public void testVerifyFieldBibtexkeyForBookError5() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "A");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{A," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertNotEquals(expected, actual);
+    }	
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForBookHit() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "a10");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{a10," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForBookHit1() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "abc");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{abc," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForBookHit2() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "ABC");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{ABC," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForBookHit3() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "Abc");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{Abc," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForBookHit4() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "abcdefghijklmnopqrstuvwxyz0123456789");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{abcdefghijklmnopqrstuvwxyz0123456789," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	@Test
+    public void testVerifyFieldBibtexkeyForBookHit5() throws IOException {
+        StringWriter stringWriter = new StringWriter();
+
+        BibEntry entry = new BibEntry("1234", "book");
+        entry.setField("bibtexkey", "A0123456789A");//set the field bibtexkey
+
+        writer.write(entry, stringWriter, BibDatabaseMode.BIBTEX);
+
+        String actual = stringWriter.toString();
+        String expected = Globals.NEWLINE + "@Book{A0123456789A," + Globals.NEWLINE +
+                "}" + Globals.NEWLINE;
+        assertEquals(expected, actual);
+    }
+	
+	
     @Test
     public void roundTripTest() throws IOException {
         // @formatter:off
@@ -764,4 +1483,3 @@ public class BibEntryWriterTest {
         assertEquals(expected, actual);
     }
 }
-
