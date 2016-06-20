@@ -35,6 +35,7 @@ import net.sf.jabref.importer.fileformat.BibTeXMLImporter;
 import net.sf.jabref.importer.fileformat.BiblioscapeImporter;
 import net.sf.jabref.importer.fileformat.BibtexImporter;
 import net.sf.jabref.importer.fileformat.CopacImporter;
+import net.sf.jabref.importer.fileformat.CsvContentImporter;
 import net.sf.jabref.importer.fileformat.EndnoteImporter;
 import net.sf.jabref.importer.fileformat.FreeCiteImporter;
 import net.sf.jabref.importer.fileformat.ImportFormat;
@@ -75,6 +76,7 @@ public class ImportFormatReader {
         formats.add(new BibtexImporter());
         formats.add(new BibTeXMLImporter());
         formats.add(new CopacImporter());
+        formats.add(new CsvContentImporter());
         formats.add(new EndnoteImporter());
         formats.add(new FreeCiteImporter());
         formats.add(new InspecImporter());
