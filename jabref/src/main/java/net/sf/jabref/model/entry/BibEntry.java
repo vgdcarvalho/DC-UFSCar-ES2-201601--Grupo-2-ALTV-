@@ -334,8 +334,13 @@ public class BibEntry {
         Calendar cal = Calendar.getInstance();
         int anoInicial = 1970;
         int anoAtual = cal.get(Calendar.YEAR);
-
-        int valor = Integer.parseInt(ano);
+        int valor = 0;
+        try {
+            valor = Integer.parseInt(ano);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "O caractere digitado no campo\nYear não é um número",
+                    "Erro - caractere inválido", 0);
+        }
         String str = null;
         boolean flag = true;
         //checa se o ano eh valido
@@ -388,6 +393,26 @@ public class BibEntry {
      */
 
     /**
+     * Trecho de codico C1. Referente às modificações escolhidas pelo grupo.
+     */
+    public String verificaLetraMinus(String campo, String nomeCampo) {
+        if (Character.isLetter(campo.charAt(0)) && Character.isLowerCase(campo.charAt(0))) {
+            int flag = JOptionPane.showConfirmDialog(null,
+                    "É interessante que o campo " + nomeCampo
+                            + " comece com letra maiúscula.\nPodemos fazer isso para você ?\n",
+                    "Primeiro Caractere Minúsculo", 0);
+            if (flag == JOptionPane.YES_OPTION) {
+                campo = campo.replaceFirst(Character.toString(campo.charAt(0)),
+                        Character.toString(Character.toUpperCase(campo.charAt(0))));
+            }
+        }
+        return campo;
+    }
+    /**
+     * Fim de C1.
+     */
+
+    /**
      * Set a field, and notify listeners about the change.
      *
      * @param name  The field to set.
@@ -408,12 +433,11 @@ public class BibEntry {
             throw new IllegalArgumentException("The field name '" + name + "' is reserved");
         }
 
-        //        System.out.println(name + ' ' + value);
-
         //Verifica se o ano e o bibtexkey eh valido para entradas do tipo "Article" ou "Book"
         if (type.equals("article") || type.equals("book")) {
 
             if (name.equals("year")) {
+                System.out.println(value);
                 value = verificaAno(value);
             }
 
@@ -427,6 +451,26 @@ public class BibEntry {
                if (name.equals("bibtexkey")) {
                     value = verificaBibtexkey(value, false);
                     }
+            }
+        }
+
+        // para todos os campos abaixo, caso tenha uma letra no 1a pos, ela sera colocada como maiusculo
+        if (type.equals("article") || type.equals("book")) {
+
+            if (name.equals("title")) {
+                value = verificaLetraMinus(value, "Title");
+            }
+            if (name.equals("publisher")) {
+                value = verificaLetraMinus(value, "Publisher");
+            }
+            if (name.equals("author")) {
+                value = verificaLetraMinus(value, "Author");
+            }
+            if (name.equals("editor")) {
+                value = verificaLetraMinus(value, "Editor");
+            }
+            if (name.equals("journal")) {
+                value = verificaLetraMinus(value, "Journal");
             }
             System.out.println(name + ' ' + value);
         }
