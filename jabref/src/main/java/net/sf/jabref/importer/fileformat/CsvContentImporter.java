@@ -43,7 +43,6 @@ public class CsvContentImporter extends ImportFormat {
     @Override
     public List<BibEntry> importEntries(InputStream in, OutputPrinter status) throws IOException {
         List<BibEntry> elements = new ArrayList<>();
-        //BufferedReader bf = new BufferedReader(ImportFormatReader.getReaderDefaultEncoding(stream));
         try (BufferedReader bf = new BufferedReader(ImportFormatReader.getReaderDefaultEncoding(in))) {
             String str;
             while ((str = bf.readLine()) != null) {
@@ -51,17 +50,11 @@ public class CsvContentImporter extends ImportFormat {
                     String[] fields = str.split(",");
                     BibEntry entry = new BibEntry();
                     int i = 1;
-//                    entry.setType("Book");
                     entry.setType(BibtexEntryTypes.BOOK);
-//                    entry.setType(BibtexEntryTypes.BOOK);
                     entry.setField("year", fields[0]);
                     entry.setField("author", fields[1]);
                     entry.setField("title", fields[2]);
                     entry.setField("publisher", fields[3]);
-//                    for (String field : Arrays.copyOfRange(fields, 1, fields.length)){
-//                        entry.setField(field, fields[i]);
-//                        i++;
-//                    }
                     elements.add(entry);
                     str = bf.readLine();
                 }
